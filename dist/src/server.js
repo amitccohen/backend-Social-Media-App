@@ -19,9 +19,12 @@ db.once('open', () => { console.log('connected to mongo DB'); });
 const postRoute_1 = __importDefault(require("./routes/postRoute"));
 const indexRoute_1 = __importDefault(require("./routes/indexRoute"));
 const authRoute_1 = __importDefault(require("./routes/authRoute"));
+const fileRoute_1 = __importDefault(require("./routes/fileRoute"));
 app.use('/post', postRoute_1.default);
 app.use('/', indexRoute_1.default);
 app.use('/auth', authRoute_1.default);
+app.use('/file', fileRoute_1.default);
+app.use('/src/uploads', express_1.default.static('src/uploads'));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 if (process.env.NODE_ENV == "development") {

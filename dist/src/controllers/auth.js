@@ -22,8 +22,10 @@ function sendError(res, error) {
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const email = req.body.email;
     const password = req.body.password;
-    if (email == null || password == null) {
-        return sendError(res, 'Please provide valid email and password');
+    const name = req.body.name;
+    const avatarUrl = req.body.avatarUrl;
+    if (email == null || password == null || name == null || avatarUrl == null) {
+        return sendError(res, 'Please provide valid values');
     }
     try {
         const user = yield user_model_1.default.findOne({ 'email': email });
@@ -40,7 +42,9 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const encryptedPassword = yield bcrypt_1.default.hash(password, salt);
         let newUser = new user_model_1.default({
             'email': email,
-            'password': encryptedPassword
+            'name': name,
+            'password': encryptedPassword,
+            'avatarUrl': avatarUrl
         });
         newUser = yield newUser.save();
         res.status(200).send({ newUser });
@@ -71,7 +75,8 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield user.save();
         return res.status(200).send({
             'accessToken': accessToken,
-            'refreshToken': refreshToken
+            'refreshToken': refreshToken,
+            'id': user._id
         });
     }
     catch (err) {

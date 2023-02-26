@@ -66,7 +66,7 @@ describe("my awesome project", () => {
     });
     test("Post get all test", (done) => {
         clientSocket.onAny((eventName, arg) => {
-            console.log('post:get_all' + arg);
+            console.log('on any ' + arg);
             expect(eventName).toBe('post:get_all');
             expect(arg.status).toBe('OK');
             clientSocket.removeAllListeners();

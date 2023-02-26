@@ -18,10 +18,13 @@ db.once('open', ()=>{console.log('connected to mongo DB')})
 import postRouter from './routes/postRoute'
 import indexRouter from './routes/indexRoute'
 import authRouter from './routes/authRoute'
+import fileRoute from './routes/fileRoute'
 
 app.use('/post',postRouter)
 app.use('/',indexRouter)
 app.use('/auth',authRouter)
+app.use('/file',fileRoute)
+app.use('/src/uploads',express.static('src/uploads'))
 
 import swaggerUI from "swagger-ui-express"
 import swaggerJsDoc from "swagger-jsdoc"

@@ -12,9 +12,10 @@ function sendError(res:Response, error:string){
 const register = async (req: Request,res: Response)=>{
     const email = req.body.email
     const password = req.body.password
-
-    if(email == null || password == null){
-        return sendError(res, 'Please provide valid email and password')
+    const name = req.body.name
+    const avatarUrl = req.body.avatarUrl
+    if(email == null || password == null || name == null || avatarUrl == null){
+        return sendError(res, 'Please provide valid values')
     }
 
     try{
@@ -32,7 +33,9 @@ const register = async (req: Request,res: Response)=>{
         const encryptedPassword = await bcrypt.hash(password,salt)
         let newUser = new User({
             'email':email,
-            'password':encryptedPassword
+            'name': name,
+            'password': encryptedPassword,
+            'avatarUrl': avatarUrl
         })
         newUser = await newUser.save()
         res.status(200).send({newUser})
@@ -44,7 +47,6 @@ const register = async (req: Request,res: Response)=>{
 const login = async (req: Request,res: Response)=>{
     const email = req.body.email
     const password = req.body.password
-
     if(email == null || password == null){
         return sendError(res, 'Please provide valid email and password')
     }
@@ -52,28 +54,24 @@ const login = async (req: Request,res: Response)=>{
     try{
         const user = await User.findOne({'email': email})
         if (user == null) return sendError(res,'incorrect user or password')
-
         const match = await bcrypt.compare(password, user.password)
         if(!match) return sendError(res,'incorrect user or password')
-
         const accessToken = await jwt.sign(
             {'id': user._id},
             process.env.ACCESS_TOKEN_SECRET,
             {'expiresIn': process.env.JWT_TOKEN_EXPIRATION}
         )
-
         const refreshToken = await jwt.sign(
             {'id': user._id},
             process.env.REFRESH_TOKEN_SECRET
         )
-
         if(user.refresh_tokens == null) user.refresh_tokens = [refreshToken]
         else user.refresh_tokens.push(refreshToken)
         await user.save()
-
         return res.status(200).send({
             'accessToken': accessToken,
-            'refreshToken': refreshToken
+            'refreshToken': refreshToken,
+            'id': user._id
         })
     }catch (err){
         console.log("error:" + err)
