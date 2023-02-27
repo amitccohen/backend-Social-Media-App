@@ -11,7 +11,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const post_1 = __importDefault(require("../controllers/post"));
-const auth_1 = __importDefault(require("../controllers/auth"));
 /**
 * @swagger
 * components:
@@ -57,7 +56,7 @@ const auth_1 = __importDefault(require("../controllers/auth"));
 *                  $ref: '#/components/schemas/Post'
 *
 */
-router.get('/', auth_1.default.authenticateMiddleware, post_1.default.getAllPosts);
+router.get('/', post_1.default.getAllPosts);
 /**
 * @swagger
 * /post/{id}:

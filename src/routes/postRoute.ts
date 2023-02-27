@@ -56,7 +56,7 @@ import auth from '../controllers/auth'
 *                  $ref: '#/components/schemas/Post'
 *  
 */
-router.get('/',auth.authenticateMiddleware, post.getAllPosts)
+router.get('/', post.getAllPosts)
 
 /**
 * @swagger

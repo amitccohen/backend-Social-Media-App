@@ -42,7 +42,8 @@ const addNewPost = async (req: Request,res: Response)=>{
 
     const post = new Post({
         message : req.body.message,
-        sender : req.body.sender
+        sender : req.body.sender,
+        avatarUrl : req.body.avatarUrl
     })
     
     try {
